@@ -23,6 +23,8 @@ var JustFilterPlugin = (function(){
 		// get object with TR based on IDs
 		serpTRList_data = JSON.parse(window.localStorage.getItem("JE-GTM-serpTRList"));
 
+		_addIDsToOffileRestaurants();
+
 		// pre-select 'Open' filter
 		filterBy("open");
 		$('#just-filter li[data-just-filter-type="open"]').addClass('active');
@@ -52,22 +54,24 @@ var JustFilterPlugin = (function(){
 		$('.c-serp-filter__list[data-ft="cuisineFilter"] a').on('click', function(ev){
 			ev.preventDefault();
 
-			//var _cuisineType = $(this).attr('href').split('/')[3];
 			var _cuisineType = $(this).attr('title').substr( 0, $(this).attr('title').indexOf('(') ).trim().toLowerCase();
-			console.log("_cuisineType -1: ", _cuisineType);
 			selectCuisine(_cuisineType);
 		});
 	};
 
-	var hideTR = function(arr, filterType) {
-		// loop through all TRs
-		$('.c-restaurant').each(function(){
-			var _restaurant_id = parseInt($(this).data('restaurant-id'));
+	var _addIDsToOffileRestaurants = function(){
+		$('.c-serp__offline .c-restaurant').each(function(){
+			var _tempData = $(this).find('.c-restaurant__logo').data('original').split('/').pop();
+			_tempData = ""+_tempData.substr(0, _tempData.indexOf('.') );
 
-			if( arr.indexOf(_restaurant_id) >= 0 ){
-				$(this).addClass('just-filter-hide-based-on-'+filterType);
-			}
+			$(this).attr('data-restaurant-id', _tempData);
 		});
+	};
+
+	var hideTR = function(arr, filterType) {
+		for (var i = arr.length - 1; i >= 0; i--) {
+			$('.c-restaurant[data-restaurant-id="'+arr[i]+'"]').addClass('just-filter-hide-based-on-'+filterType);
+		}
 
 		// FIXME: send event to remove overlay
 
@@ -164,8 +168,6 @@ var JustFilterPlugin = (function(){
 
 						// check cuisine
 						if( _cuisineTypes[i] === cuisineType ){
-							console.log("cuisineType matches: ", cuisineType, serpTRList_data[_restaurantID] );
-
 							TRtoShow.push(_restaurantID);
 						}
 					}
@@ -178,24 +180,10 @@ var JustFilterPlugin = (function(){
 		// TODO: rewrite this to work with filters&sorting and multiple cuisines selected simultaneously
 		// hide all
 		$('.c-restaurant').addClass('just-filter-hide-based-on-cuisine');
-		// show only cuisine-specific
-		// loop through all TRs
-		$('.c-restaurant').each(function(){
-
-			var _restaurant_id;
-
-			if( typeof $(this).data('restaurant-id') !== 'undefined' ){
-				_restaurant_id = ""+$(this).data('restaurant-id');
-			} else { // TODO: create and execute on init function for extracting and assigning restaurant ID for offline restaurants
-				var _tempData = $(this).find('.c-restaurant__logo').data('original').split('/').pop();
-				_tempData = _tempData.substr(0, _tempData.indexOf('.') );
-				_restaurant_id = ""+_tempData;
-			}
-
-			if( TRtoShow.indexOf(_restaurant_id) >= 0 ){
-				$(this).removeClass('just-filter-hide-based-on-cuisine');
-			}
-		});
+		// show only cuisine-specific TRs
+		for (var i = TRtoShow.length - 1; i >= 0; i--) {
+			$('.c-restaurant[data-restaurant-id="'+TRtoShow[i]+'"]').removeClass('just-filter-hide-based-on-cuisine');
+		}
 	};
 
 	return {
