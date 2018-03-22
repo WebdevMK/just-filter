@@ -9,7 +9,7 @@ var JustFilterPlugin = (function(){
 	var serpTRList_data,
 		TRtoShow = [],
 		TRtoHide = [],
-		css = '<style>.clearfix:after { content: ""; display: table; clear: both; } .just-filter-hide-based-on-minorder, .just-filter-hide-based-on-freedelivery, .just-filter-hide-based-on-rating, .just-filter-hide-based-on-promotion { display: none; } #just-filter { position: fixed; top: 0; left: 0; width: 100%; background-color: #fff; border-bottom: 4px solid #fa0029; padding: 10px 0; } #just-filter .just-filter-wrapper { width: 100%; max-width: 940px; margin: 0 auto; } #just-filter .headline { font-size: 20px; font-family: "Ubuntu"; color: #333; font-weight: 500; } #just-filter ul { list-style: none; } #just-filter li { float: left; font-size: 18px; color: #000; cursor: pointer; padding: 5px 5px; margin: 0 15px; } #just-filter li:hover, #just-filter li:active { color: #E37222; } #just-filter li.active { color: #266abd; font-weight: bold; } #just-filter li.active:hover, #just-filter li.active:active { color: #266abd; } </style>',
+		css = '<style>.clearfix:after { content: ""; display: table; clear: both; } .just-filter-hide-based-on-cuisine, .just-filter-hide-based-on-minorder, .just-filter-hide-based-on-freedelivery, .just-filter-hide-based-on-rating, .just-filter-hide-based-on-promotion { display: none; } #just-filter { position: fixed; top: 0; left: 0; width: 100%; background-color: #fff; border-bottom: 4px solid #fa0029; padding: 10px 0; } #just-filter .just-filter-wrapper { width: 100%; max-width: 940px; margin: 0 auto; } #just-filter .headline { font-size: 20px; font-family: "Ubuntu"; color: #333; font-weight: 500; } #just-filter ul { list-style: none; } #just-filter li { float: left; font-size: 18px; color: #000; cursor: pointer; padding: 5px 5px; margin: 0 15px; } #just-filter li:hover, #just-filter li:active { color: #E37222; } #just-filter li.active { color: #266abd; font-weight: bold; } #just-filter li.active:hover, #just-filter li.active:active { color: #266abd; } </style>',
 		html = '<div id="just-filter"> <div class="just-filter-wrapper"> <p class="headline">Filters:</p> <ul class="clearfix"> <li data-just-filter-type="open">Open</li> <li data-just-filter-type="minorder">Minimum Order 0-10&pound;</li> <li data-just-filter-type="freedelivery">Free Delivery</li> <li data-just-filter-type="rating">Rating min. 4/6</li> <li data-just-filter-type="promotion">Promotion</li> </ul> </div> </div>';
 
 	var init = function(){
@@ -47,6 +47,16 @@ var JustFilterPlugin = (function(){
 				}				
 			}
 		});
+
+		// Cuisines filter overtake
+		$('.c-serp-filter__list[data-ft="cuisineFilter"] a').on('click', function(ev){
+			ev.preventDefault();
+
+			//var _cuisineType = $(this).attr('href').split('/')[3];
+			var _cuisineType = $(this).attr('title').substr( 0, $(this).attr('title').indexOf('(') ).trim().toLowerCase();
+			console.log("_cuisineType -1: ", _cuisineType);
+			selectCuisine(_cuisineType);
+		});
 	};
 
 	var hideTR = function(arr, filterType) {
@@ -76,7 +86,6 @@ var JustFilterPlugin = (function(){
 	};	
 
 	var defilterBy = function(filterType){
-		console.log("defilter by; ", filterType);
 
 		if( filterType  === "open" ){
 			$('.c-serp__offline, .c-serp__closed').show();	
@@ -87,7 +96,7 @@ var JustFilterPlugin = (function(){
 	};
 
 	var filterBy = function(filterType){
-		console.log("filter by; ", filterType);
+
 		TRtoShow = []; // reset
 		TRtoHide = []; // reset
 
@@ -137,6 +146,57 @@ var JustFilterPlugin = (function(){
 			hideTR(TRtoHide, filterType);		
 		}
 	};	
+
+	var selectCuisine = function(cuisineType){
+
+		TRtoShow = []; // reset
+
+		// loop through all TR data
+		for (var _restaurantID in serpTRList_data ) {
+			if( typeof serpTRList_data[_restaurantID].cuisines != 'undefined' && serpTRList_data[_restaurantID].cuisines.trim().length > 1 ){
+
+				var _cuisineTypes = serpTRList_data[_restaurantID].cuisines.toLowerCase().split(', ');
+				if( _cuisineTypes.length >= 1){
+
+					// loop through restaurant's cuisines
+					for (var i = _cuisineTypes.length - 1; i >= 0; i--) {
+						var _cuisineName = _cuisineTypes[i];
+
+						// check cuisine
+						if( _cuisineTypes[i] === cuisineType ){
+							console.log("cuisineType matches: ", cuisineType, serpTRList_data[_restaurantID] );
+
+							TRtoShow.push(_restaurantID);
+						}
+					}
+				}
+			}
+		}
+
+		console.log("TRtoShow: ", TRtoShow);
+
+		// TODO: rewrite this to work with filters&sorting and multiple cuisines selected simultaneously
+		// hide all
+		$('.c-restaurant').addClass('just-filter-hide-based-on-cuisine');
+		// show only cuisine-specific
+		// loop through all TRs
+		$('.c-restaurant').each(function(){
+
+			var _restaurant_id;
+
+			if( typeof $(this).data('restaurant-id') !== 'undefined' ){
+				_restaurant_id = ""+$(this).data('restaurant-id');
+			} else { // TODO: create and execute on init function for extracting and assigning restaurant ID for offline restaurants
+				var _tempData = $(this).find('.c-restaurant__logo').data('original').split('/').pop();
+				_tempData = _tempData.substr(0, _tempData.indexOf('.') );
+				_restaurant_id = ""+_tempData;
+			}
+
+			if( TRtoShow.indexOf(_restaurant_id) >= 0 ){
+				$(this).removeClass('just-filter-hide-based-on-cuisine');
+			}
+		});
+	};
 
 	return {
 		init: init
