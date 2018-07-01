@@ -17,6 +17,9 @@
 .c-serp > div:last-child {
   margin-left: 3%;
 }
+.c-restaurant.hidden {
+  display: none;
+}
 /* General */
 .clearfix:after {
   content: "";
