@@ -113,6 +113,8 @@ li p:hover .just-filter-tickbox {
   font-size: 16px;
   font-weight: 400;
   cursor: pointer;
+  border-top: 1px solid #cacaca;
+  padding-top: 15px;
 }
 .just-filter-cuisines-control .just-filter-cuisines-show-more {
   display: inline-block;
@@ -135,10 +137,6 @@ li p:hover .just-filter-tickbox {
   padding-right: 15px;
   width: 100%;
   box-sizing: border-box;
-}
-.just-filter-cuisines-control.just-filter-list-expanded {
-  border-top: 1px solid #cacaca;
-  padding-top: 15px;
 }
 .just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-more {
   display: none;
