@@ -78,6 +78,9 @@ li p:hover .just-filter-tickbox {
   transform: translateX(-50%) rotate(45deg) scale(1);
 }
 /* Cuisines Filters */
+.c-serp-filter__list[data-ft="cuisineFilter"] ul.o-card {
+  display: none;
+}
 .c-serp-filter__list[data-ft="cuisineFilter"] .o-card {
   padding: 8px;
 }
