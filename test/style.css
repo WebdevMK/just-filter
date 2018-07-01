@@ -1,0 +1,201 @@
+/* Styles for current website"s elements */
+#content {
+  background-color: #f5f5f5;
+}
+.o-card {
+  box-shadow: none;
+}
+.c-serp__header {
+  background-color: #fff;
+}
+.c-serp-filter__list[data-ft="cuisineFilter"] ul.o-car {
+  display: none;
+}
+.c-serp > div:first-child {
+  width: 30%;
+}
+.c-serp > div:last-child {
+  margin-left: 3%;
+}
+/* General */
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.just-filter-tickbox {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  border: 1px solid #eaeaea;
+  background-color: #fff;
+  vertical-align: middle;
+  margin-left: 0;
+  margin-top: 0;
+  -moz-box-shadow: 0 0 0 2px transparent,0 0 0 0 transparent;
+  box-shadow: 0 0 0 2px transparent, 0 0 0 0 transparent;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.just-filter-tickbox:before {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%) rotate(45deg) scale(0);
+  -moz-transform: translateX(-50%) rotate(45deg) scale(0);
+  -ms-transform: translateX(-50%) rotate(45deg) scale(0);
+  transform: translateX(-50%) rotate(45deg) scale(0);
+  border: 2px solid #fff;
+  background-color: transparent;
+  width: 40%;
+  height: 80%;
+  border-top: 0;
+  border-left: 0;
+  display: block;
+  opacity: 0;
+  -moz-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+li p:hover .just-filter-tickbox {
+  border-color: #266abd;
+  -moz-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+.is-selected .just-filter-tickbox {
+  background-color: #266abd;
+  border: 3px solid #266abd;
+}
+.is-selected .just-filter-tickbox:before {
+  opacity: 1;
+  -webkit-transform: translateX(-50%) rotate(45deg) scale(1);
+  -moz-transform: translateX(-50%) rotate(45deg) scale(1);
+  -ms-transform: translateX(-50%) rotate(45deg) scale(1);
+  transform: translateX(-50%) rotate(45deg) scale(1);
+}
+/* Cuisines Filters */
+.c-serp-filter__list[data-ft="cuisineFilter"] .o-card {
+  padding: 8px;
+}
+.just-filter-cuisines li {
+  border: 0;
+  cursor: pointer;
+}
+.just-filter-cuisines li:hover,
+.just-filter-cuisines li:active {
+  text-decoration: underline;
+}
+.just-filter-cuisines li p {
+  padding: 8px 8px 8px 32px;
+  margin-bottom: 5px;
+  position: relative;
+}
+.just-filter-cuisines li.just-filter-separate-item {
+  border-bottom: 1px solid #cacaca;
+  margin-bottom: 8px;
+}
+.just-filter-cuisines li.is-selected {
+  padding: 0;
+  font-weight: 400;
+}
+.just-filter-cuisines li.is-hideable {
+  display: none;
+}
+.just-filter-cuisines li.is-hideable.is-shown {
+  display: block;
+}
+.just-filter-cuisines-control {
+  color: #266abd;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+.just-filter-cuisines-control .just-filter-cuisines-show-more {
+  display: inline-block;
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><path fill="%232F7DE1" d="M27.9 43.4c-1.5 0-3.1-.6-4.3-1.8L0 17.9l5.2-5.2 22.7 22.7 22.8-22.7 5.2 5.2-23.6 23.7c-1.2 1.2-2.7 1.8-4.4 1.8z"/></svg>');
+  background-position: 100%;
+  background-repeat: no-repeat;
+  -moz-background-size: 14px;
+  background-size: 14px;
+  padding-right: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.just-filter-cuisines-control .just-filter-cuisines-show-fewer {
+  display: none;
+  background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><path fill="%232F7DE1" d="M5.4 43.2L.2 37.9l23.5-23.4c2.3-2.3 6.2-2.3 8.5 0L55.8 38l-5.2 5.2L28 20.7 5.4 43.2z" class="st0"/></svg>');
+  background-position: 100%;
+  background-repeat: no-repeat;
+  -moz-background-size: 14px;
+  background-size: 14px;
+  padding-right: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.just-filter-cuisines-control.just-filter-list-expanded {
+  border-top: 1px solid #cacaca;
+  padding-top: 15px;
+}
+.just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-more {
+  display: none;
+}
+.just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-fewer {
+  display: inline-block;
+}
+.just-filter-hide-based-on-cuisine,
+.just-filter-hide-based-on-minorder,
+.just-filter-hide-based-on-freedelivery,
+.just-filter-hide-based-on-rating,
+.just-filter-hide-based-on-promotion {
+  display: none;
+}
+/* New Filters */
+#just-filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 4px solid #fa0029;
+  padding: 10px 0;
+}
+#just-filter .just-filter-wrapper {
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+}
+#just-filter .headline {
+  font-size: 20px;
+  font-family: "Ubuntu";
+  color: #333;
+  font-weight: 500;
+}
+#just-filter ul {
+  list-style: none;
+}
+#just-filter li {
+  float: left;
+  font-size: 18px;
+  color: #000;
+  cursor: pointer;
+  padding: 5px 5px;
+  margin: 0 15px;
+}
+#just-filter li.active {
+  color: #266abd;
+  font-weight: bold;
+}
+#just-filter li.active:hover,
+#just-filter li.active:active {
+  color: #266abd;
+}
+#just-filter li:hover,
+#just-filter li:active {
+  color: #E37222;
+}
+
+/*# sourceMappingURL=style.css.map */
