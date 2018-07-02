@@ -17,21 +17,18 @@ var JustFilterPlugin = (function(){
 
 	var init = function(){
 
-		// CSS styles
-		$('body').append( css );
-
-		// add the filters element
-		$('body').append( html );
+		// CSS styles and the filters element
+		$('body').append( css ).append( html );
 
 		// get object with TR based on IDs
 		serpTRList_data = JSON.parse(window.localStorage.getItem("JE-GTM-serpTRList"));	
 
 		// start with full TR list
 		for (var _restaurantID in serpTRList_data ) {
-			allTR.push( _restaurantID );
+			allTRs.push( _restaurantID );
 		}
 
-		TRtoShow = allTR.slice();
+		TRtoShow = allTRs.slice();
 
 		// add new Cuisines filters
 		_buildCuisines();
@@ -63,7 +60,6 @@ var JustFilterPlugin = (function(){
 
 					searchState.filters.splice( searchState.filters.indexOf(_filterType), 1);	
 					$(this).removeClass('active');
-					//defilterBy(_filterType);
 					updateTRResults();
 				}				
 			}
@@ -81,10 +77,8 @@ var JustFilterPlugin = (function(){
 
 	var _buildCuisines = function(){
 
-		// TODO: change static HTML to dynamically created list
-
-		var htmlCuisinesHighlighted = '';
-		var htmlCuisinesNormal = '';
+		var _htmlCuisinesHighlighted = '';
+		var _htmlCuisinesNormal = '';
 
 		htmlCuisines = '<div class="o-card"> <ul class="just-filter-cuisines">';
 
@@ -97,30 +91,28 @@ var JustFilterPlugin = (function(){
 				htmlCuisines += '<li class="is-selected just-filter-separate-item" data-cuisine-type="all"><p><span class="just-filter-tickbox"></span>All <span class="just-filter-cuisine-count">(213)</span></p></li>';
 			} else {
 
-				var title = $(this).find('a').attr('title');
-				var cuisineName = title.substring(0, title.indexOf(' (') );
-				var trCount = title.substring( title.indexOf(' (') +2, title.length - 1 );
+				var _title = $(this).find('a').attr('title');
+				var _cuisineName = _title.substring(0, _title.indexOf(' (') );
+				var _trCount = _title.substring( _title.indexOf(' (') +2, _title.length - 1 );
 
 				// highlighted cuisines gathered at the top
 				// TODO: arrange them in a specific and fixed order
-				if( highlightedCuisinesTypes.indexOf( cuisineName ) > -1 ){
-					htmlCuisinesHighlighted += '<li class="just-filter-highlighted-item" data-cuisine-type="'+cuisineName.toLowerCase()+'"><p><span class="just-filter-tickbox"></span>'+cuisineName+' <span class="just-filter-cuisine-count">('+trCount+')</span></p></li>';
+				if( highlightedCuisinesTypes.indexOf( _cuisineName ) > -1 ){
+					_htmlCuisinesHighlighted += '<li class="just-filter-highlighted-item" data-cuisine-type="'+_cuisineName.toLowerCase()+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
 				} else {
-					htmlCuisinesNormal += '<li class="is-hideable" data-cuisine-type="'+cuisineName.toLowerCase()+'"><p><span class="just-filter-tickbox"></span>'+cuisineName+' <span class="just-filter-cuisine-count">('+trCount+')</span></p></li>';
+					_htmlCuisinesNormal += '<li class="is-hideable" data-cuisine-type="'+_cuisineName.toLowerCase()+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
 				}
 			}
 		});
 
-		htmlCuisines += htmlCuisinesHighlighted;
-		htmlCuisines += htmlCuisinesNormal;
+		htmlCuisines += _htmlCuisinesHighlighted;
+		htmlCuisines += _htmlCuisinesNormal;
 
 		htmlCuisines += '</ul> <p class="just-filter-cuisines-control"> <span class="just-filter-cuisines-show-more">More Cuisines</span> <span class="just-filter-cuisines-show-fewer">Fewer Cuisiens</span> </p> </div>';
 
 		$('.c-serp-filter__list[data-ft="cuisineFilter"] h3').after( htmlCuisines );
 
 		// Cuisine Filters functionality
-		// TODO: add: when cuisine selected, 'All' option is deselected automatically
-		// TODO: add: when deselecting all specific cuisine filters, automatically select 'All' option
 		$('.just-filter-cuisines li p').on('click', function(){
 			// TODO: add check for disabled item
 			if( true ){
@@ -148,7 +140,8 @@ var JustFilterPlugin = (function(){
 	var hideTRs = function() {
 		$('.c-restaurant').addClass('hidden');
 
-		// FIXME: send event to remove overlay
+		// TODO: send event to remove overlay
+		// TODO: scroll the viewport slower / add animation
 
 		// fix for restaurants' logo not loading
 		$(window).scrollTop(1);
@@ -160,21 +153,11 @@ var JustFilterPlugin = (function(){
 			$('.c-restaurant[data-restaurant-id="'+TRtoShow[i]+'"]').removeClass('hidden');
 		}
 
-		// FIXME: send event to remove overlay
+		// TODO: send event to remove overlay
 
 		// fix for restaurants' logo not loading
 		$(window).scrollTop(1);
 	};	
-
-	var defilterBy = function(filterType){
-
-		if( filterType  === "open" ){
-			$('.c-serp__offline, .c-serp__closed').show();	
-			$('.c-serp__header.c-serp__header--offline, .c-serp__header--closed').show();
-		} else {
-			showTR(filterType);
-		}
-	};
 
 	var filterBy = function(filterType){
 
@@ -182,41 +165,40 @@ var JustFilterPlugin = (function(){
 
 		for (var i = _temp_TRtoShow.length - 1; i >= 0; i--) {
 			var _restaurantID = _temp_TRtoShow[i];
-			var hasPassedFilterConditions = false;
+			var _hasPassedFilterConditions = false;
 
 			switch(filterType){
 				case "open":
-					// TODO: add conditions here
 					if( serpTRList_data[_restaurantID].open === true ){
-						hasPassedFilterConditions = true;
+						_hasPassedFilterConditions = true;
 					}
 					break;
 				case "minorder":
 					if( parseInt(serpTRList_data[_restaurantID].minAmount) <= 10 ){
-						hasPassedFilterConditions = true;
+						_hasPassedFilterConditions = true;
 					}
 					break;
 				case "freedelivery":
 					// free delivery and available collection conditions
 					if( parseFloat(serpTRList_data[_restaurantID].deliveryCost) === 0 && serpTRList_data[_restaurantID].deliveryOptions.indexOf("delivery") >= 0 ){
-						hasPassedFilterConditions = true;
+						_hasPassedFilterConditions = true;
 					}
 					break;
 				case "rating":
 					if( parseFloat(serpTRList_data[_restaurantID].rating.average) >= 4 ){
-						hasPassedFilterConditions = true;
+						_hasPassedFilterConditions = true;
 					}
 					break;
 				case "promotion":
 					if( serpTRList_data[_restaurantID].promotion !== null && serpTRList_data[_restaurantID].promotion !== "" ){
-						hasPassedFilterConditions = true;
+						_hasPassedFilterConditions = true;
 					}
 					break;
 				default:
 					console.log("error: 'Just Filter' plugin doesn't recognise the filter");						
 			}
 
-			if( !hasPassedFilterConditions ){
+			if( !_hasPassedFilterConditions ){
 				TRtoShow.splice( TRtoShow.indexOf( _restaurantID ), 1);
 			}
 		}
@@ -258,9 +240,10 @@ var JustFilterPlugin = (function(){
 		console.log("--- updateTRresults based on: ", searchState );
 		
 		// Cuisines types
+		// create a list of available TRs
 		if( searchState.cuisines.length === 0 ){
 
-			TRtoShow = allTR.slice();
+			TRtoShow = allTRs.slice();
 
 		} else {
 
@@ -290,6 +273,7 @@ var JustFilterPlugin = (function(){
 		}
 		
 		// Filters
+		// removes filtered out TRs
 		if( searchState.filters.length > 0 ){
 			for (var i = searchState.filters.length - 1; i >= 0; i--) {
 				filterBy( searchState.filters[i] );
@@ -297,6 +281,7 @@ var JustFilterPlugin = (function(){
 		}
 
 		// Sorting
+		// rearranges TRs
 		if( searchState.sorting.length > 0 ){
 			
 		}
