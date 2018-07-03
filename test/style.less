@@ -1,7 +1,10 @@
 /* Styles for current website"s elements */
 #content { background-color: #f5f5f5; }
+#breadcrumb { display: none; }
 .o-card { box-shadow: none; }
-.c-serp__header { background-color: #fff; }
+.c-serp .c-serp__header { display: none; }
+.c-serp__header.c-serp__header--primary { margin-bottom: 0; }
+#content > .l-container { padding-top: 32px; }
 .c-serp-filter__list[data-ft="cuisineFilter"] ul.o-car { display: none; }
 .c-serp > div:first-child {
 	width: 30%;
@@ -169,12 +172,9 @@
 /* New Filters */
 #just-filter {
 
-	position: fixed;
-	top: 0;
-	left: 0;
 	width: 100%;
 	background-color: #fff;
-	border-bottom: 4px solid #fa0029;
+	border-bottom: 1px solid #cacaca;
 	padding: 10px 0;
 
 	.just-filter-wrapper {
@@ -223,6 +223,7 @@
 	top: 0;
 	left: 0;
 	background-color: rgba(255, 255, 255, 0.5);
+	z-index: 9;
 }
 #just-filter-overlay.hidden {
 	display: none;
