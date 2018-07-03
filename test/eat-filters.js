@@ -49,19 +49,12 @@ var JustFilterPlugin = (function(){
 				var _filterType = $(this).data('just-filter-type');
 
 				if( !$(this).hasClass('active') ){
-					// FIXME: add animation; move to a separate function; add overlay;
 					$('#just-filter-overlay').removeClass('hidden');
-					$(window).scrollTop(0);
-
 					searchState.filters.push(_filterType);
-					//filterBy(_filterType);
 					$(this).addClass('active');
 					updateTRResults();
 
 				} else {
-					// FIXME: add animation; move to a separate function; add overlay;
-					$(window).scrollTop(0);
-
 					searchState.filters.splice( searchState.filters.indexOf(_filterType), 1);	
 					$(this).removeClass('active');
 					updateTRResults();
