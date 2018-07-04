@@ -220,5 +220,47 @@ li p:hover .just-filter-tickbox {
 #just-filter-overlay.hidden {
   display: none;
 }
+/* Scroll to the top button */
+#just-filter-scroll-top {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: #266abd;
+  cursor: pointer;
+}
+#just-filter-scroll-top .just-filter-scroll-top-copy {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  font-family: "Hind Vadodara", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  display: inline-block;
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+  text-align: center;
+}
+#just-filter-scroll-top .just-filter-scroll-top-icon {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  height: 13px;
+  width: 13px;
+  -webkit-transform: translateX(-50%) rotate(-45deg) scale(1);
+  -moz-transform: translateX(-50%) rotate(-45deg) scale(1);
+  transform: translateX(-50%) rotate(-45deg) scale(1);
+  border-width: 3px;
+  border-style: solid;
+  border-color: #fff #fff transparent transparent;
+  transition: all 0.2s ease-in-out;
+}
+#just-filter-scroll-top:hover .just-filter-scroll-top-icon,
+#just-filter-scroll-top:active .just-filter-scroll-top-icon {
+  top: 7px;
+  transition: all 0.2s ease-in-out;
+}
 
 /*# sourceMappingURL=style.css.map */
