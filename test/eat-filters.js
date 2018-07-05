@@ -263,6 +263,7 @@ var JustFilterPlugin = (function(){
 		// hide TRs with an animated changes and overlay
 		hideTRs();
 
+		TRtoShow = [];
 		TRtoShow = allTRs.slice(); // reset
 
 		// Filters
@@ -272,54 +273,53 @@ var JustFilterPlugin = (function(){
 			for (var i = searchState.filters.length - 1; i >= 0; i--) {
 				filterBy( searchState.filters[i] );
 			}
-
-			// update 'All' TRs count at this point
-			$('.just-filter-cuisines li[data-cuisine-type="all"] .just-filter-cuisine-count').html( '('+TRtoShow.length+')' );
 		}
-		
+
+		// update 'All' TRs count at this point
+		$('.just-filter-cuisines li[data-cuisine-type="all"] .just-filter-cuisine-count').html( '('+TRtoShow.length+')' );		
+
 		// Cuisine types
 		// filter available TRs by cuisines
-		if( searchState.cuisines.length > 0 ){
-			var _cuisinesCount = {};
+		var _cuisinesCount = {}; //reset
 
-			for (var i = TRtoShow.length - 1; i >= 0; i--) {
+		for (var i = TRtoShow.length - 1; i >= 0; i--) {
 
-				var _restaurantID = TRtoShow[i];
-				var _hasPassedFilterConditions = false;
+			var _restaurantID = TRtoShow[i];
+			var _hasPassedFilterConditions = false; // flag for filtering out non-selected TRs
 
-				if( typeof serpTRList_data[_restaurantID].cuisines != 'undefined' && serpTRList_data[_restaurantID].cuisines.trim().length > 1 ){
+			if( typeof serpTRList_data[_restaurantID].cuisines != 'undefined' && serpTRList_data[_restaurantID].cuisines.trim().length > 1 ){
 
-					var _cuisineTypes = serpTRList_data[_restaurantID].cuisines.toLowerCase().split(', ');
+				var _cuisineTypes = serpTRList_data[_restaurantID].cuisines.toLowerCase().split(', ');
 
-					if( _cuisineTypes.length >= 1){
+				if( _cuisineTypes.length >= 1){
 
-						// loop through restaurant's cuisines
-						for (var j = _cuisineTypes.length - 1; j >= 0; j--) {
-							var _cuisineName = _cuisineTypes[j];
+					// loop through restaurant's cuisines
+					for (var j = _cuisineTypes.length - 1; j >= 0; j--) {
+						var _cuisineName = _cuisineTypes[j];
 
-							// check if any of the cuisines is selected
-							if( searchState.cuisines.indexOf(_cuisineName) > -1 ){
-								_hasPassedFilterConditions = true;
-							}
-
-							if( typeof _cuisinesCount[ _cuisineName ] === 'undefined' ){
-	                            _cuisinesCount[ _cuisineName ] = 1;
-	                        } else {
-	                            _cuisinesCount[ _cuisineName ] += 1;
-	                        }
+						// check if any of the cuisines is selected ('All' is not listed as a cuisine, hence the check for length)
+						if( searchState.cuisines.length > 0 && searchState.cuisines.indexOf(_cuisineName) > -1 ){
+							_hasPassedFilterConditions = true;
 						}
+
+						if( typeof _cuisinesCount[ _cuisineName ] === 'undefined' ){
+                            _cuisinesCount[ _cuisineName ] = 1;
+                        } else {
+                            _cuisinesCount[ _cuisineName ] += 1;
+                        }
 					}
 				}
-
-				if( !_hasPassedFilterConditions ){
-					TRtoShow.splice( TRtoShow.indexOf( _restaurantID ), 1);
-				}
 			}
 
-			// update cuisines count
-			for( var _cuisineType in _cuisinesCount ){
-				$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"] .just-filter-cuisine-count').html( '('+_cuisinesCount[ _cuisineType ]+')' );
+			// filter out TR if it's not selected ('All' is not listed as a cuisine, hence the check for length)
+			if( searchState.cuisines.length > 0 && !_hasPassedFilterConditions ){
+				TRtoShow.splice( TRtoShow.indexOf( _restaurantID ), 1);
 			}
+		}
+
+		// update cuisines count
+		for( var _cuisineType in _cuisinesCount ){
+			$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"] .just-filter-cuisine-count').html( '('+_cuisinesCount[ _cuisineType ]+')' );
 		}
 
 		// Sorting
