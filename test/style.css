@@ -89,6 +89,10 @@ li p:hover .just-filter-tickbox {
   -ms-transform: translateX(-50%) rotate(45deg) scale(1);
   transform: translateX(-50%) rotate(45deg) scale(1);
 }
+.is-inactive p:hover .just-filter-tickbox {
+  border: 1px solid #eaeaea;
+  cursor: default;
+}
 /* Cuisines Filters */
 .c-serp-filter__list[data-ft="cuisineFilter"] ul.o-card {
   display: none;
@@ -116,6 +120,13 @@ li p:hover .just-filter-tickbox {
 .just-filter-cuisines li.is-selected {
   padding: 0;
   font-weight: 400;
+}
+.just-filter-cuisines li.is-inactive {
+  color: #cacaca;
+  cursor: default;
+}
+.just-filter-cuisines li.is-inactive:hover {
+  text-decoration: none;
 }
 .just-filter-cuisines li.is-hideable {
   display: none;

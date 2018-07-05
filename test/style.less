@@ -74,6 +74,11 @@
 			transform: translateX(-50%) rotate(45deg) scale(1);
 	    }
     }
+
+    .is-inactive p:hover & {
+    	border: 1px solid #eaeaea;
+    	cursor: default;
+    }
 }
 
 /* Cuisines Filters */
@@ -106,6 +111,15 @@
 		&.is-selected {
 			padding: 0;
 			font-weight: 400;
+		}
+
+		&.is-inactive {
+			color: #cacaca;
+			cursor: default;
+
+			&:hover {
+				text-decoration: none;
+			}
 		}
 
 		&.is-hideable {
