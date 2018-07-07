@@ -10,10 +10,12 @@ var JustFilterPlugin = (function(){
 	var serpTRList_data, // data for all TRs for a given location
 		allTRs = [], // Array of IDs [Str] for all TRs for a given location
 		TRtoShow = [], // Array of IDs [Str] for currently shown TRs
-		css = '<style> /* Styles for current website"s elements */ #content { background-color: #f5f5f5; } #breadcrumb { display: none; } .o-card { box-shadow: none; } .c-serp .c-serp__header { display: none; } .c-serp__header.c-serp__header--primary { margin-bottom: 0; } #content > .l-container { padding-top: 32px; } .c-serp-filter__list[data-ft="cuisineFilter"] ul.o-car { display: none; } .c-serp > div:first-child { width: 30%; } .c-serp > div:last-child { margin-left: 3%; } .c-restaurant.hidden { display: none; } /* General */ .clearfix:after { content: ""; display: table; clear: both; } .just-filter-tickbox { box-sizing: border-box; width: 20px; height: 20px; position: absolute; left: 0; display: inline-block; border: 1px solid #eaeaea; background-color: #fff; vertical-align: middle; margin-left: 0; margin-top: 0; -moz-box-shadow: 0 0 0 2px transparent,0 0 0 0 transparent; box-shadow: 0 0 0 2px transparent, 0 0 0 0 transparent; border-radius: 3px; cursor: pointer; } .just-filter-tickbox:before { content: ""; position: absolute; box-sizing: border-box; top: 0; left: 50%; -webkit-transform: translateX(-50%) rotate(45deg) scale(0); -moz-transform: translateX(-50%) rotate(45deg) scale(0); -ms-transform: translateX(-50%) rotate(45deg) scale(0); transform: translateX(-50%) rotate(45deg) scale(0); border: 2px solid #fff; background-color: transparent; width: 40%; height: 80%; border-top: 0; border-left: 0; display: block; opacity: 0; -moz-transition: all 0.25s ease-in-out; transition: all 0.25s ease-in-out; } li p:hover .just-filter-tickbox { border-color: #266abd; -moz-transition: all 0.25s ease-in-out; transition: all 0.25s ease-in-out; } .is-selected .just-filter-tickbox { background-color: #266abd; border: 3px solid #266abd; } .is-selected .just-filter-tickbox:before { opacity: 1; -webkit-transform: translateX(-50%) rotate(45deg) scale(1); -moz-transform: translateX(-50%) rotate(45deg) scale(1); -ms-transform: translateX(-50%) rotate(45deg) scale(1); transform: translateX(-50%) rotate(45deg) scale(1); } .is-inactive p:hover .just-filter-tickbox { border: 1px solid #eaeaea; cursor: default; } /* Cuisines Filters */ .c-serp-filter__list[data-ft="cuisineFilter"] ul.o-card { display: none; } .c-serp-filter__list[data-ft="cuisineFilter"] .o-card { padding: 8px; } .just-filter-cuisines li { border: 0; cursor: pointer; } .just-filter-cuisines li:hover, .just-filter-cuisines li:active { text-decoration: underline; } .just-filter-cuisines li p { padding: 8px 8px 8px 32px; margin-bottom: 5px; position: relative; text-transform: capitalize; } .just-filter-cuisines li.just-filter-separate-item { border-bottom: 1px solid #cacaca; margin-bottom: 8px; } .just-filter-cuisines li.is-selected { padding: 0; font-weight: 400; } .just-filter-cuisines li.is-inactive { color: #cacaca; cursor: default; } .just-filter-cuisines li.is-inactive:hover { text-decoration: none; } .just-filter-cuisines li.is-hideable { display: none; } .just-filter-cuisines li.is-hideable.is-shown { display: block; } .just-filter-cuisines-control { color: #266abd; font-size: 16px; font-weight: 400; cursor: pointer; border-top: 1px solid #cacaca; padding-top: 15px; } .just-filter-cuisines-control .just-filter-cuisines-show-more { display: inline-block; background-image: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><path fill="%232F7DE1" d="M27.9 43.4c-1.5 0-3.1-.6-4.3-1.8L0 17.9l5.2-5.2 22.7 22.7 22.8-22.7 5.2 5.2-23.6 23.7c-1.2 1.2-2.7 1.8-4.4 1.8z"/></svg>\'); background-position: 100%; background-repeat: no-repeat; -moz-background-size: 14px; background-size: 14px; padding-right: 15px; width: 100%; box-sizing: border-box; } .just-filter-cuisines-control .just-filter-cuisines-show-fewer { display: none; background-image: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><path fill="%232F7DE1" d="M5.4 43.2L.2 37.9l23.5-23.4c2.3-2.3 6.2-2.3 8.5 0L55.8 38l-5.2 5.2L28 20.7 5.4 43.2z" class="st0"/></svg>\'); background-position: 100%; background-repeat: no-repeat; -moz-background-size: 14px; background-size: 14px; padding-right: 15px; width: 100%; box-sizing: border-box; } .just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-more { display: none; } .just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-fewer { display: inline-block; } .just-filter-hide-based-on-cuisine, .just-filter-hide-based-on-minorder, .just-filter-hide-based-on-freedelivery, .just-filter-hide-based-on-rating, .just-filter-hide-based-on-promotion { display: none; } /* New Filters */ #just-filter { width: 100%; background-color: #fff; border-bottom: 1px solid #cacaca; padding: 10px 0; } #just-filter .just-filter-wrapper { width: 100%; max-width: 940px; margin: 0 auto; } #just-filter .headline { font-size: 20px; font-family: "Ubuntu"; color: #333; font-weight: 500; } #just-filter ul { list-style: none; } #just-filter li { float: left; font-size: 18px; color: #000; cursor: pointer; padding: 5px 5px; margin: 0 15px; } #just-filter li.active { color: #266abd; font-weight: bold; } #just-filter li.active:hover, #just-filter li.active:active { color: #266abd; } #just-filter li:hover, #just-filter li:active { color: #E37222; } /* Overlay */ #just-filter-overlay { position: fixed; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.5); z-index: 9; } #just-filter-overlay.hidden { display: none; } /* Scroll to the top button */ #just-filter-scroll-top { position: fixed; bottom: 10px; right: 10px; height: 40px; width: 40px; border-radius: 20px; background-color: #266abd; cursor: pointer; } #just-filter-scroll-top .just-filter-scroll-top-copy { color: #fff; font-size: 14px; line-height: 1; font-family: "Hind Vadodara", "Helvetica Neue", Helvetica, Arial, sans-serif; display: inline-block; position: absolute; bottom: 5px; width: 100%; text-align: center; } #just-filter-scroll-top .just-filter-scroll-top-icon { display: inline-block; position: absolute; top: 10px; left: 50%; height: 13px; width: 13px; -webkit-transform: translateX(-50%) rotate(-45deg) scale(1); -moz-transform: translateX(-50%) rotate(-45deg) scale(1); transform: translateX(-50%) rotate(-45deg) scale(1); border-width: 3px; border-style: solid; border-color: #fff #fff transparent transparent; transition: all 0.2s ease-in-out; } #just-filter-scroll-top:hover .just-filter-scroll-top-icon, #just-filter-scroll-top:active .just-filter-scroll-top-icon { top: 7px; transition: all 0.2s ease-in-out; } /*# sourceMappingURL=style.css.map */ </style>',
+		css = '<style> /* Styles for current website"s elements */ #content { background-color: #f5f5f5; } #breadcrumb { display: none; } .o-card { box-shadow: none; } .c-serp .c-serp__header { display: none; } .c-serp__header.c-serp__header--primary { margin-bottom: 0; } #content > .l-container { padding-top: 32px; } .c-serp-filter__list[data-ft="cuisineFilter"] ul.o-car { display: none; } .c-serp > div:first-child { width: 30%; } .c-serp > div:last-child { margin-left: 3%; } .c-restaurant.hidden { display: none; } /* General */ .clearfix:after { content: ""; display: table; clear: both; } .just-filter-tickbox { box-sizing: border-box; width: 20px; height: 20px; position: absolute; left: 0; display: inline-block; border: 1px solid #eaeaea; background-color: #fff; vertical-align: middle; margin-left: 0; margin-top: 0; -moz-box-shadow: 0 0 0 2px transparent,0 0 0 0 transparent; box-shadow: 0 0 0 2px transparent, 0 0 0 0 transparent; border-radius: 3px; cursor: pointer; } .just-filter-tickbox:before { content: ""; position: absolute; box-sizing: border-box; top: 0; left: 50%; -webkit-transform: translateX(-50%) rotate(45deg) scale(0); -moz-transform: translateX(-50%) rotate(45deg) scale(0); -ms-transform: translateX(-50%) rotate(45deg) scale(0); transform: translateX(-50%) rotate(45deg) scale(0); border: 2px solid #fff; background-color: transparent; width: 40%; height: 80%; border-top: 0; border-left: 0; display: block; opacity: 0; -moz-transition: all 0.25s ease-in-out; transition: all 0.25s ease-in-out; } li p:hover .just-filter-tickbox { border-color: #266abd; -moz-transition: all 0.25s ease-in-out; transition: all 0.25s ease-in-out; } .is-selected .just-filter-tickbox { background-color: #266abd; border: 3px solid #266abd; } .is-selected .just-filter-tickbox:before { opacity: 1; -webkit-transform: translateX(-50%) rotate(45deg) scale(1); -moz-transform: translateX(-50%) rotate(45deg) scale(1); -ms-transform: translateX(-50%) rotate(45deg) scale(1); transform: translateX(-50%) rotate(45deg) scale(1); } .is-inactive p:hover .just-filter-tickbox { border: 1px solid #eaeaea; cursor: default; } /* Cuisines Filters */ .c-serp-filter__list[data-ft="cuisineFilter"] ul.o-card { display: none; } .c-serp-filter__list[data-ft="cuisineFilter"] .o-card { padding: 8px; } .just-filter-cuisines li { border: 0; cursor: pointer; } .just-filter-cuisines li:hover, .just-filter-cuisines li:active { text-decoration: underline; } .just-filter-cuisines li p { padding: 8px 8px 8px 32px; margin-bottom: 5px; position: relative; text-transform: capitalize; } .just-filter-cuisines li.just-filter-separate-item { border-bottom: 1px solid #cacaca; margin-bottom: 8px; } .just-filter-cuisines li.is-selected { padding: 0; font-weight: 400; } .just-filter-cuisines li.is-inactive { color: #cacaca; cursor: default; } .just-filter-cuisines li.is-inactive:hover { text-decoration: none; } .just-filter-cuisines li.is-hideable { display: none; } .just-filter-cuisines li.is-hideable.is-shown { display: block; } .just-filter-cuisines-control { color: #266abd; font-size: 16px; font-weight: 400; cursor: pointer; border-top: 1px solid #cacaca; padding-top: 15px; } .just-filter-cuisines-control .just-filter-cuisines-show-more { display: inline-block; background-image: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><path fill="%232F7DE1" d="M27.9 43.4c-1.5 0-3.1-.6-4.3-1.8L0 17.9l5.2-5.2 22.7 22.7 22.8-22.7 5.2 5.2-23.6 23.7c-1.2 1.2-2.7 1.8-4.4 1.8z"/></svg>\'); background-position: 100%; background-repeat: no-repeat; -moz-background-size: 14px; background-size: 14px; padding-right: 15px; width: 100%; box-sizing: border-box; } .just-filter-cuisines-control .just-filter-cuisines-show-fewer { display: none; background-image: url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><path fill="%232F7DE1" d="M5.4 43.2L.2 37.9l23.5-23.4c2.3-2.3 6.2-2.3 8.5 0L55.8 38l-5.2 5.2L28 20.7 5.4 43.2z" class="st0"/></svg>\'); background-position: 100%; background-repeat: no-repeat; -moz-background-size: 14px; background-size: 14px; padding-right: 15px; width: 100%; box-sizing: border-box; } .just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-more { display: none; } .just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-fewer { display: inline-block; } .just-filter-hide-based-on-cuisine, .just-filter-hide-based-on-minorder, .just-filter-hide-based-on-freedelivery, .just-filter-hide-based-on-rating, .just-filter-hide-based-on-promotion { display: none; } /* New Filters */ #just-filter { width: 100%; background-color: #fff; border-bottom: 1px solid #cacaca; padding: 10px 0; } #just-filter .just-filter-wrapper { width: 100%; max-width: 940px; margin: 0 auto; } #just-filter .headline { font-size: 20px; font-family: "Ubuntu"; color: #333; font-weight: 500; } #just-filter ul { list-style: none; } #just-filter li { float: left; font-size: 18px; color: #000; cursor: pointer; padding: 5px 5px; margin: 0 15px; } #just-filter li.active { color: #266abd; font-weight: bold; } #just-filter li.active:hover, #just-filter li.active:active { color: #266abd; } #just-filter li:hover, #just-filter li:active { color: #E37222; } #just-filter li.is-inactive { color: #cacaca; cursor: default; } #just-filter li.is-inactive:hover { color: #cacaca; } /* Overlay */ #just-filter-overlay { position: fixed; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.5); z-index: 9; } #just-filter-overlay.hidden { display: none; } /* Scroll to the top button */ #just-filter-scroll-top { position: fixed; bottom: 10px; right: 10px; height: 40px; width: 40px; border-radius: 20px; background-color: #266abd; cursor: pointer; } #just-filter-scroll-top .just-filter-scroll-top-copy { color: #fff; font-size: 14px; line-height: 1; font-family: "Hind Vadodara", "Helvetica Neue", Helvetica, Arial, sans-serif; display: inline-block; position: absolute; bottom: 5px; width: 100%; text-align: center; } #just-filter-scroll-top .just-filter-scroll-top-icon { display: inline-block; position: absolute; top: 10px; left: 50%; height: 13px; width: 13px; -webkit-transform: translateX(-50%) rotate(-45deg) scale(1); -moz-transform: translateX(-50%) rotate(-45deg) scale(1); transform: translateX(-50%) rotate(-45deg) scale(1); border-width: 3px; border-style: solid; border-color: #fff #fff transparent transparent; transition: all 0.2s ease-in-out; } #just-filter-scroll-top:hover .just-filter-scroll-top-icon, #just-filter-scroll-top:active .just-filter-scroll-top-icon { top: 7px; transition: all 0.2s ease-in-out; } </style>',
 		html = '<div id="just-filter-scroll-top"><span class="just-filter-scroll-top-icon"></span><span class="just-filter-scroll-top-copy">TOP</span></div><div id="just-filter-overlay" class="hidden"></div> <div id="just-filter"> <div class="just-filter-wrapper"> <p class="headline">Filters:</p> <ul class="clearfix"> <li data-just-filter-type="open">Open</li> <li data-just-filter-type="minorder">Minimum Order 0-10&pound;</li> <li data-just-filter-type="freedelivery">Free Delivery</li> <li data-just-filter-type="rating">Rating min. 4/6</li> <li data-just-filter-type="promotion">Promotion</li> </ul> </div> </div>',
 		htmlCuisines = '',
 		highlightedCuisinesTypes = ['burgers', 'pizza', 'chinese', 'indian', 'italian'],
+		filterList = ['open', 'minorder', 'freedelivery', 'rating', 'promotion'],
+		stringOfAvailableFiltersForShownTRs = '',
 		cuisinesCount = { 'all': 0},
 		searchState = { cuisines: [], sorting: [], filters: [] },
 		shouldIShowResults = false, // a flag indicating the timing for showing TR results (to control overlay animation and minimum overlay time)
@@ -54,6 +56,12 @@ var JustFilterPlugin = (function(){
                         }
 					}
 				}
+			}
+
+			// filters
+			// check what filter conditions restaurant would pass and add them to the TRs data obj
+			if( typeof serpTRList_data[ _restaurantID ].filters === 'undefined' ){
+				serpTRList_data[ _restaurantID ].filters = addFilterData(_restaurantID);
 			}
 		}
 
@@ -136,7 +144,7 @@ var JustFilterPlugin = (function(){
 		htmlCuisines += _htmlCuisinesHighlighted;
 		htmlCuisines += _htmlCuisinesNormal;
 
-		htmlCuisines += '</ul> <p class="just-filter-cuisines-control"> <span class="just-filter-cuisines-show-more">More Cuisines</span> <span class="just-filter-cuisines-show-fewer">Fewer Cuisiens</span> </p> </div>';
+		htmlCuisines += '</ul> <p class="just-filter-cuisines-control"> <span class="just-filter-cuisines-show-more">More Cuisines</span> <span class="just-filter-cuisines-show-fewer">Fewer Cuisines</span> </p> </div>';
 
 		$('.c-serp-filter__list[data-ft="cuisineFilter"] h3').after( htmlCuisines );
 
@@ -206,50 +214,28 @@ var JustFilterPlugin = (function(){
 		}, 50);
 	};	
 
-	var filterBy = function(filterType){
+	var addFilterData = function(_restaurantID){
+		var _filterList =  [];
 
-		var _temp_TRtoShow = TRtoShow.slice();
-
-		for (var i = _temp_TRtoShow.length - 1; i >= 0; i--) {
-			var _restaurantID = _temp_TRtoShow[i];
-			var _hasPassedFilterConditions = false;
-
-			switch(filterType){
-				case "open":
-					if( serpTRList_data[_restaurantID].open === true ){
-						_hasPassedFilterConditions = true;
-					}
-					break;
-				case "minorder":
-					if( parseInt(serpTRList_data[_restaurantID].minAmount) <= 10 ){
-						_hasPassedFilterConditions = true;
-					}
-					break;
-				case "freedelivery":
-					// free delivery and available collection conditions
-					if( parseFloat(serpTRList_data[_restaurantID].deliveryCost) === 0 && serpTRList_data[_restaurantID].deliveryOptions.indexOf("delivery") >= 0 ){
-						_hasPassedFilterConditions = true;
-					}
-					break;
-				case "rating":
-					if( parseFloat(serpTRList_data[_restaurantID].rating.average) >= 4 ){
-						_hasPassedFilterConditions = true;
-					}
-					break;
-				case "promotion":
-					if( serpTRList_data[_restaurantID].promotion !== null && serpTRList_data[_restaurantID].promotion !== "" ){
-						_hasPassedFilterConditions = true;
-					}
-					break;
-				default:
-					console.log("error: 'Just Filter' plugin doesn't recognise the filter");						
-			}
-
-			if( !_hasPassedFilterConditions ){
-				TRtoShow.splice( TRtoShow.indexOf( _restaurantID ), 1);
-			}
+		if( serpTRList_data[_restaurantID].open === true ){
+			_filterList.push('open');
 		}
-	};	
+		if( parseInt(serpTRList_data[_restaurantID].minAmount) <= 10 ){
+			_filterList.push('minorder');
+		}
+		// free delivery and available collection conditions
+		if( parseFloat(serpTRList_data[_restaurantID].deliveryCost) === 0 && serpTRList_data[_restaurantID].deliveryOptions.indexOf("delivery") >= 0 ){
+			_filterList.push('freedelivery');
+		}
+		if( parseFloat(serpTRList_data[_restaurantID].rating.average) >= 4 ){
+			_filterList.push('rating');
+		}
+		if( serpTRList_data[_restaurantID].promotion !== null && serpTRList_data[_restaurantID].promotion !== "" ){
+			_filterList.push('promotion');
+		}
+
+		return _filterList;
+	};
 
 	var selectCuisine = function(cuisineType){
 
@@ -283,20 +269,38 @@ var JustFilterPlugin = (function(){
 		// hide TRs with an animated changes and overlay
 		hideTRs();
 
-		TRtoShow = allTRs.slice(); // reset
+		stringOfAvailableFiltersForShownTRs = ''; // reset
 
 		// Filters
 		// removes filtered out TRs
 		if( searchState.filters.length > 0 ){
+			TRtoShow = []; // reset
 
-			for (var i = searchState.filters.length - 1; i >= 0; i--) {
-				filterBy( searchState.filters[i] );
+			for (var _restaurantID in serpTRList_data ) {
+				var _passedAllFilters = true;
+				
+				if( typeof serpTRList_data[_restaurantID].filters != 'undefined' && serpTRList_data[_restaurantID].filters.length >= 1 ){
+
+					for (var i = searchState.filters.length - 1; i >= 0; i--) {
+						searchState.filters[i]
+						if( _passedAllFilters && serpTRList_data[_restaurantID].filters.indexOf( searchState.filters[i] ) === -1 ){
+							_passedAllFilters = false;
+						}
+					}
+				} else {
+					_passedAllFilters = false;
+				}
+
+				if( _passedAllFilters ){
+					TRtoShow.push(_restaurantID);
+				}
 			}
+		} else {
+			TRtoShow = allTRs.slice(); // reset
 		}
 
 		// update 'All' TRs count at this point
 		$('.just-filter-cuisines li[data-cuisine-type="all"] .just-filter-cuisine-count').html( '('+TRtoShow.length+')' );	
-			
 
 		// Cuisine types
 		// reset cuisines count
@@ -327,6 +331,11 @@ var JustFilterPlugin = (function(){
 						// check if any of the cuisines is selected ('All' is not listed as a cuisine, hence the check for length)
 						if( searchState.cuisines.length > 0 && searchState.cuisines.indexOf(_cuisineName) > -1 ){
 							_hasPassedFilterConditions = true;
+							// compile all filter names for all visible restaurants (when some cuisines are selected)
+							stringOfAvailableFiltersForShownTRs += ","+serpTRList_data[_restaurantID].filters.join(',');
+
+						} else if( searchState.cuisines.length === 0 ){ // compile all filter names for all visible restaurants (when 'All' TRs are selected)
+							stringOfAvailableFiltersForShownTRs += ","+serpTRList_data[_restaurantID].filters.join(',');
 						}
 
 						cuisinesCount[ _cuisineName ] += 1;
@@ -340,11 +349,30 @@ var JustFilterPlugin = (function(){
 			}
 		}
 
-		// update cuisines count
+		$('#just-filter li.is-inactive').removeClass('is-inactive'); // clear inactive filters
+		$('.just-filter-cuisines li.is-inactive').removeClass('is-inactive'); // clear inactive cuisines
+
+		// update cuisines count in DOM
 		for( var _cuisineType in cuisinesCount ){
 			$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"]').find('.just-filter-cuisine-count').html( '('+cuisinesCount[ _cuisineType ]+')' );
-			if( cuisinesCount[ _cuisineType ] === 0 ){
+			if( cuisinesCount[ _cuisineType ] === 0 && !$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"]').hasClass('is-selected') ){
 				$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"]').addClass('is-inactive');
+			}
+		}
+
+		// update non-available filters
+		// get not selected filters
+		if( searchState.filters.length < filterList.length ){
+			var _nonSelectedFilters = filterList.filter(function(_filterType){
+				return searchState.filters.indexOf(_filterType) === -1;
+			});
+
+			// loop through not-selected filters and disable the onse that have no TRs in the shown results
+			for (var i = _nonSelectedFilters.length - 1; i >= 0; i--) {
+				if( stringOfAvailableFiltersForShownTRs.indexOf(_nonSelectedFilters[i]) === -1 ){
+					// make this filter inactive
+					$('#just-filter li[data-just-filter-type="'+_nonSelectedFilters[i]+'"]').addClass('is-inactive');
+				}
 			}
 		}
 

@@ -219,6 +219,13 @@ li p:hover .just-filter-tickbox {
 #just-filter li:active {
   color: #E37222;
 }
+#just-filter li.is-inactive {
+  color: #cacaca;
+  cursor: default;
+}
+#just-filter li.is-inactive:hover {
+  color: #cacaca;
+}
 /* Overlay */
 #just-filter-overlay {
   position: fixed;
