@@ -96,7 +96,7 @@ var JustFilterPlugin = (function(){
 
 			if( index === 0 ){
 				// 'All' Cusines count
-				htmlCuisines += '<li class="is-selected just-filter-separate-item" data-cuisine-type="all"><p><span class="just-filter-tickbox"></span>All <span class="just-filter-cuisine-count">(213)</span></p></li>';
+				htmlCuisines += '<li class="is-selected just-filter-separate-item just-filter-cusine-all" data-cuisine-type="all"><p><span class="just-filter-tickbox"></span>All <span class="just-filter-cuisine-count">(213)</span></p></li>';
 			} else {
 
 				var _title = $(this).find('a').attr('title');
@@ -266,6 +266,8 @@ var JustFilterPlugin = (function(){
 		TRtoShow = [];
 		TRtoShow = allTRs.slice(); // reset
 
+		$('.just-filter-cuisines li').not('.just-filter-cusine-all').addClass('is-not-updated');
+
 		// Filters
 		// removes filtered out TRs
 		if( searchState.filters.length > 0 ){
@@ -320,13 +322,11 @@ var JustFilterPlugin = (function(){
 
 		// update cuisines count
 		for( var _cuisineType in _cuisinesCount ){
-			$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"] .just-filter-cuisine-count').html( '('+_cuisinesCount[ _cuisineType ]+')' );
-
-			// disable if there's no TRs for particular cuisine
-			if( parseInt(_cuisinesCount[ _cuisineType ]) === 0 && !$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"]').hasClass('is-inactive') ){
-				$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"]').addClass('is-inactive');
-			}
+			$('.just-filter-cuisines li[data-cuisine-type="'+_cuisineType+'"]').removeClass('is-not-updated').find('.just-filter-cuisine-count').html( '('+_cuisinesCount[ _cuisineType ]+')' );
 		}
+
+		// disable if there's no TRs for particular cuisine
+		$('.just-filter-cuisines li.is-not-updated').not('.just-filter-cusine-all').addClass('is-inactive').removeClass('is-not-updated').find('.just-filter-cuisine-count').html('(0)');		
 
 		// Sorting
 		// rearranges TRs
