@@ -112,6 +112,7 @@ li p:hover .just-filter-tickbox {
   padding: 8px 8px 8px 32px;
   margin-bottom: 5px;
   position: relative;
+  text-transform: capitalize;
 }
 .just-filter-cuisines li.just-filter-separate-item {
   border-bottom: 1px solid #cacaca;
