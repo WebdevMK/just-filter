@@ -4,8 +4,10 @@
 .o-card { box-shadow: none; }
 .c-serp .c-serp__header { display: none; }
 .c-serp__header.c-serp__header--primary { margin-bottom: 0; }
+.c-serp__open, .c-serp__closed, .c-serp__offline { display: none; }
 #content > .l-container { padding-top: 32px; }
-.c-serp-filter__list[data-ft="cuisineFilter"] ul.o-car { display: none; }
+.c-serp-filter__list[data-ft="sortByFilter"] ul.o-card { display: none; }
+.c-serp-filter__list[data-ft="cuisineFilter"] ul.o-card { display: none; }
 .c-serp > div:first-child {
 	width: 30%;
 }
@@ -16,6 +18,11 @@
 
 /* General */
 .clearfix:after { content: ""; display: table; clear: both; }
+
+.just-extension-flex-container {
+	display: flex;
+	flex-direction: column;
+}
 
 .just-filter-tickbox {
 	box-sizing: border-box;
@@ -79,6 +86,27 @@
     	border: 1px solid #eaeaea;
     	cursor: default;
     }
+}
+
+/* Restaurant results */
+#just-extension-restaurant-list {
+	background: #fff;
+	padding-left: 16px;
+    padding-right: 16px;
+    margin-bottom: 32px;
+    border-radius: 2px;
+}
+
+/* Sorting */
+.c-serp-filter__list[data-ft="sortByFilter"] .o-card {
+	li {
+		padding: 14px 0;
+		cursor: pointer;
+
+		&.is-selected {
+			cursor: default;
+		}
+	}
 }
 
 /* Cuisines Filters */
