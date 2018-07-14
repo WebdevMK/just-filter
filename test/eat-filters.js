@@ -517,5 +517,8 @@ var JustFilterPlugin = (function(){
 })();
 
 $(document).ready(function(){
-	JustFilterPlugin.init();	
+	// check if we are on the general result page
+	if( window.location.href.indexOf('just-eat.co.uk/area/') >= 0 && window.location.href.indexOf('so=') === -1 && window.location.pathname.split('/').length === 3 ){
+		JustFilterPlugin.init();
+	}
 });
