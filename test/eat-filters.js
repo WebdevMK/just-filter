@@ -19,7 +19,7 @@ var JustFilterPlugin = (function(){
 		cuisinesCount = { 'all': 0},
 		searchState = { cuisines: [], sorting: "default", filters: [] },
 		shouldIShowResults = false, // a flag indicating the timing for showing TR results (to control overlay animation and minimum overlay time)
-		overlayAnimationTiming = [200, 400, 200, 600, 200]; // timing for overlay animation: [ overlay appear -> scrolling begins, scroll time, scrolling stops -> hiding TRs, no TRs shown, showing TRs -> removing overlay]
+		overlayAnimationTiming = [150, 400, 150, 400, 150]; // timing for overlay animation: [ overlay appear -> scrolling begins, scroll time, scrolling stops -> hiding TRs, no TRs shown, showing TRs -> removing overlay]
 
 	var init = function(){
 
