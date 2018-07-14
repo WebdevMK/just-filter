@@ -33,7 +33,7 @@ var JustFilterPlugin = (function(){
 
 		// Sorting
 		// TODO: chang place, layout and styling
-		$('.c-serp-filter__list[data-ft="sortByFilter"] h3').after( '<div class="o-card"><ul><li class="is-selected" data-sort-type="default"><span class="o-radio"></span>Default</li><li data-sort-type="distance"><span class="o-radio"></span>Distance</li><li data-sort-type="name"><span class="o-radio"></span>A-Z</li></ul></div>' ); 
+		$('.c-serp-filter__list[data-ft="sortByFilter"] h3').after( '<div class="o-card"><ul><li class="is-selected" data-sort-type="default"><span class="o-radio"></span>Default</li><li data-sort-type="rating"><span class="o-radio"></span>Rating</li><li data-sort-type="distance"><span class="o-radio"></span>Distance</li><li data-sort-type="name"><span class="o-radio"></span>A-Z</li></ul></div>' ); 
 
 		// change Cuisine filters title
 		$('.c-serp-filter__list[data-ft="cuisineFilter"] h3').html( $('.c-serp-filter__list[data-ft="cuisineFilter"] h3').html().replace("Cuisines", "Cuisines and dishes") );
@@ -429,6 +429,11 @@ var JustFilterPlugin = (function(){
 			case 'distance':
 				TRtoShow.sort(function(a,b) {
 				    return parseFloat(serpTRList_data[a].distance) - parseFloat(serpTRList_data[b].distance);
+				});
+				break;
+			case 'rating':
+				TRtoShow.sort(function(a,b) {
+				    return parseFloat(serpTRList_data[b].rating.average) - parseFloat(serpTRList_data[a].rating.average);
 				});
 				break;
 			default:
