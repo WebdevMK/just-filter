@@ -96,6 +96,11 @@ var JustFilterPlugin = (function(){
 		updateTRResults();
 		$('#just-filter li[data-just-filter-type="open"]').addClass('active');
 
+		// load images for restaurant logos
+		$('#just-extension-restaurant-list .c-restaurant').each(function(){
+			$(this).find('.c-restaurant__logo').attr('src', $(this).find('.c-restaurant__logo').data('original') );
+		});
+
 		// filters handler
 		$('#just-filter li').on('click', function(){
 			// 'inactive' check
