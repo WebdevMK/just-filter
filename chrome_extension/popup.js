@@ -10,7 +10,7 @@ chrome.storage.local.get(['isJustEatExtensionOn'], function(result) {
 		chrome.storage.local.set({'isJustEatExtensionOn': 'true'}, function() {});
 	}	
 
-	let turnOnButton = document.getElementById('turnOn');
+/*	let turnOnButton = document.getElementById('turnOn');
 	let turnOffButton = document.getElementById('turnOff');
 
 	if( isJustEatExtensionOn === 'true' && !turnOnButton.parentNode.classList.contains('is-on') ){
@@ -39,6 +39,56 @@ chrome.storage.local.get(['isJustEatExtensionOn'], function(result) {
 	    chrome.tabs.reload();
 
 	  });
-	};	
+	};*/
+
+	let extensiontSwitchEl = document.querySelector('.filters-switch-main');
+
+	if( isJustEatExtensionOn === 'true' && !extensiontSwitchEl.classList.contains('is-active') ){
+		extensiontSwitchEl.className += ' is-active';
+	}
+
+	extensiontSwitchEl.onclick = function(element) {
+		console.log("--- click: ", extensiontSwitchEl.classList.contains('is-disabled') );
+
+		if( !extensiontSwitchEl.classList.contains('is-disabled') ){
+
+			extensiontSwitchEl.className += ' is-disabled';
+			console.log("--- extensiontSwitchEl.className:", extensiontSwitchEl.className );
+
+			if( extensiontSwitchEl.classList.contains('is-active') ){
+
+			  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+			    chrome.storage.local.set({'isJustEatExtensionOn': 'false'}, function() {
+					extensiontSwitchEl.className = extensiontSwitchEl.className.replace('is-active', '');
+				});
+			    // refresh the page and turn the extension off
+			    chrome.tabs.reload();
+
+			    setTimeout(function(){
+			    	extensiontSwitchEl.className = extensiontSwitchEl.className.replace('is-disabled', '');
+			    }, 3000);
+
+			  });
+
+			} else {
+
+			  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+			    chrome.storage.local.set({'isJustEatExtensionOn': 'true'}, function() {
+					extensiontSwitchEl.className += ' is-active';
+				});
+			    // refresh the tab and turn the extension on
+			    chrome.tabs.reload();
+
+			    setTimeout(function(){
+			    	extensiontSwitchEl.className = extensiontSwitchEl.className.replace('is-disabled', '');
+			    }, 3000);
+
+			  });
+
+			}
+		}
+	};
 });
 

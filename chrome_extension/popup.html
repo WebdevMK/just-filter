@@ -2,35 +2,61 @@
 <html>
   <head>
     <style>
-      .tagline {
-        text-align: center;
+      * {
+        box-sizing: border-box;
       }
-      button {
+      body {
+        width: 200px;
+        height: 100px;
+      }
+      .headline {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .filters-switch {
+        padding-bottom: 20px;
+      }
+      .filters-switch-main {
+        background: #bbbbbb;
+        border-radius: 3px;
+        height: 36px;
+        padding: 3px;
+        width: 76px;
+        position: relative;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.22);
+        cursor: pointer;
+        margin: 0 auto;
+      }
+      .filters-switch-main .filters-switch-button {
+        position: absolute;
+        left: 3px;
+        right: auto;
+        width: 30px;
         height: 30px;
-        width: 60px;
-        outline: none;
-        text-align: center;
+        background: #fff;
+        border-radius: 3px;
+        transition: all 0.4s cubic-bezier(0.33, 1.6, 0.66, 1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.22);
       }
-      #turnOn {
-        background-color: #ccc;
+      .filters-switch-main.is-active {
+        background: #266abd;
       }
-      #turnOff {
-        background-color: red;
-      }
-      .switch-container.is-on #turnOn {
-        background-color: red;
-      }
-      .switch-container.is-on #turnOff {
-        background-color: #ccc;
+      .filters-switch-main.is-active .filters-switch-button {
+        left: 43px;
+        transition: all 0.4s cubic-bezier(0.33, 1.6, 0.66, 1);
       }
 
     </style>
   </head>
   <body>
-    <section class="switch-container">
-      <p class="tagline">Switch Just Eat Extension On/Off</p>
-      <button id="turnOn">ON</button>
-      <button id="turnOff">OFF</button>      
+
+    <section class="filters-switch">
+      <p class="headline">Switch Just Eat Extension</p>
+      <div class="filters-switch-main">
+        <div class="filters-switch-button"></div>
+      </div>
     </section>
 
     <script src="popup.js"></script>
