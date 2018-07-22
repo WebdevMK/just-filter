@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .tagline {
+        text-align: center;
+      }
+      button {
+        height: 30px;
+        width: 60px;
+        outline: none;
+        text-align: center;
+      }
+      #turnOn {
+        background-color: #ccc;
+      }
+      #turnOff {
+        background-color: red;
+      }
+      .switch-container.is-on #turnOn {
+        background-color: red;
+      }
+      .switch-container.is-on #turnOff {
+        background-color: #ccc;
+      }
+
+    </style>
+  </head>
+  <body>
+    <section class="switch-container">
+      <p class="tagline">Switch Just Eat Extension On/Off</p>
+      <button id="turnOn">ON</button>
+      <button id="turnOff">OFF</button>      
+    </section>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
