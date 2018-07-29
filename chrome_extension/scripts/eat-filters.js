@@ -85,8 +85,10 @@ var JustFilterPlugin = (function(){
 		
 			if( $('#just-extension-restaurant-list .c-restaurant[data-restaurant-id="'+_restaurantID+'"] .c-restaurant__distance').length === 1 ){
 				serpTRList_data[ _restaurantID ][ "distance" ] = $('#just-extension-restaurant-list .c-restaurant[data-restaurant-id="'+_restaurantID+'"] .c-restaurant__distance').text().replace('<span class="o-icon o-icon--pin"></span>', '').replace('miles', '').trim();
-			} else {
+			} else if( $('#just-extension-restaurant-list .c-restaurant[data-restaurant-id="'+_restaurantID+'"]').hasClass('c-restaurant--offline') ){
 				serpTRList_data[ _restaurantID ][ "distance" ] = '999';
+			} else {
+				serpTRList_data[ _restaurantID ][ "distance" ] = '900'; // open restaurant with no distance data will be dispayed above offline restaurants
 			}
 		}
 
@@ -254,23 +256,30 @@ var JustFilterPlugin = (function(){
 			if( shouldIShowResults ){
 				clearInterval(waitForHidingTRs);
 
+				var _addNoDistanceHeader = false;
+
+				// add information to the user about not known distance for offline TRs
+				if( searchState.sorting === "distance" && searchState.filters.indexOf('open') === -1 && searchState.filters.indexOf('preorder') === -1 ){
+					_addNoDistanceHeader = true;
+
+					// remove previous information to the user about not known distance for offline TRs
+					$('#just-extension-restaurant-list .just-extension-header-distance-unknown').remove();
+				}				
+
 				// show and apply sorting
 				for (var i = 0; i < TRtoShow.length; i++) {
 					$('#just-extension-restaurant-list .c-restaurant[data-restaurant-id="'+TRtoShow[i]+'"]').removeClass('hidden').css('order', ""+(i+1) );
+
+					if( _addNoDistanceHeader && serpTRList_data[ TRtoShow[i] ].distance >= 800 ){
+						$('#just-extension-restaurant-list .c-restaurant[data-restaurant-id="'+TRtoShow[i]+'"]').before( '<div class="just-extension-header-distance-unknown" style="order: '+ (i+1) +';"><p>Distance unknown</p></div>' );
+						_addNoDistanceHeader = false;
+					}
 				}
 
 				// remove old condition
 				$('#just-extension-restaurant-list .c-restaurant.no-top-border').removeClass('no-top-border')
 				// hide first's TR top border
 				$('#just-extension-restaurant-list .c-restaurant[data-restaurant-id="'+TRtoShow[0]+'"]').addClass('no-top-border');
-
-				// remove previous information to the user about not known distance for offline TRs
-				$('#just-extension-restaurant-list .just-extension-header-distance-unknown').remove();
-
-				// add information to the user about not known distance for offline TRs
-				if( searchState.sorting === "distance" && searchState.filters.indexOf('open') === -1 && searchState.filters.indexOf('preorder') === -1 ){
-					$('#just-extension-restaurant-list .c-restaurant--offline').not('.hidden').first().before( '<div class="just-extension-header-distance-unknown"><p>Distance unknown</p></div>' );
-				}
 
 				setTimeout(function(){
 					$('#just-filter-overlay').addClass('hidden');
