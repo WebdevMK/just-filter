@@ -156,6 +156,17 @@
     margin-bottom: 32px;
     border-radius: 2px;
   }
+  #just-extension-restaurant-list .just-extension-header-distance-unknown {
+    padding: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background: none;
+  }
+  #just-extension-restaurant-list .just-extension-header-distance-unknown p {
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: 300;
+  }
   /* Sorting */
   .c-serp-filter__list[data-ft="sortByFilter"] .o-card {
     padding-right: 8px;
