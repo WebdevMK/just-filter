@@ -27,8 +27,7 @@
       {
       "matches": ["*://*.just-eat.co.uk/area/*"],
       "run_at": "document_start",
-      "js": ["/scripts/jquery-1.12.4.min.js", "/scripts/eat-filters.js"],
-      "css": ["/css/style.css"]
+      "js": ["/scripts/jquery-1.12.4.min.js", "/scripts/eat-filters.js"]
       }
     ],
     "web_accessible_resources": [
