@@ -45,9 +45,6 @@ var JustFilterPlugin = (function(){
 		// change Cuisine filters title
 		$('.c-serp-filter__list[data-ft="cuisineFilter"] h3').html( $('.c-serp-filter__list[data-ft="cuisineFilter"] h3').html().replace("Cuisines", "Cuisines and dishes") );
 
-		// get object with TR based on IDs
-		//serpTRList_data = JSON.parse(window.localStorage.getItem("JE-GTM-serpTRList"));	
-		
 		_addPreorderData();
 
 		// loop through all TRs and get some additional data
@@ -488,8 +485,6 @@ var JustFilterPlugin = (function(){
 
 		// show TRs
 		showTRs();
-
-		console.log("--- serpTRList_data: ", serpTRList_data);
 	};
 
 	// util function for scroll animation
