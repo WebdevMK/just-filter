@@ -258,12 +258,12 @@ var JustFilterPlugin = (function(){
 
 				var _addNoDistanceHeader = false;
 
+				// remove previous information to the user about not known distance for offline TRs
+				$('#just-extension-restaurant-list .just-extension-header-distance-unknown').remove();
+
 				// add information to the user about not known distance for offline TRs
 				if( searchState.sorting === "distance" && searchState.filters.indexOf('open') === -1 && searchState.filters.indexOf('preorder') === -1 ){
 					_addNoDistanceHeader = true;
-
-					// remove previous information to the user about not known distance for offline TRs
-					$('#just-extension-restaurant-list .just-extension-header-distance-unknown').remove();
 				}				
 
 				// show and apply sorting

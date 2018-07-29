@@ -1,6 +1,6 @@
 {
     "name": "Filters and Sorting for Just Eat UK",
-    "version": "0.1",
+    "version": "0.2",
     "description": "Improve the default filtering and sorting on Just Eat UK restaurants results pages", 
     "permissions": ["storage", "declarativeContent", "activeTab"],
     "background": {
