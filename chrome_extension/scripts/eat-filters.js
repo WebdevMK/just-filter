@@ -17,9 +17,10 @@ var JustFilterPlugin = (function(){
 		filterList = ['open', 'minorder', 'freedelivery', 'rating', 'promotion', 'preorder'],
 		stringOfAvailableFiltersForShownTRs = '',
 		cuisinesCount = { 'all': 0},
+		openTRCount = 0,
 		searchState = { cuisines: [], sorting: "default", filters: [] },
 		shouldIShowResults = false, // a flag indicating the timing for showing TR results (to control overlay animation and minimum overlay time)
-		overlayAnimationTiming = [150, 400, 150, 400, 150]; // timing for overlay animation: [ overlay appear -> scrolling begins, scroll time, scrolling stops -> hiding TRs, no TRs shown, showing TRs -> removing overlay]
+		overlayAnimationTiming = [150, 350, 150, 350, 150]; // timing for overlay animation: [ overlay appear -> scrolling begins, scroll time, scrolling stops -> hiding TRs, no TRs shown, showing TRs -> removing overlay]
 
 	var init = function(restaurants_data){
 
@@ -98,11 +99,14 @@ var JustFilterPlugin = (function(){
 		// add new Cuisines filters
 		_buildCuisines();
 
-		// TODO: re-think this initial overlay animation
-		// pre-select 'Open' filter
-		searchState.filters.push('open');
-		updateTRResults();
-		$('#just-filter li[data-just-filter-type="open"]').addClass('active');
+		// pre-select 'Open' filter only if there are min. 3 TRs open at the given time
+		if( openTRCount >= 3 ){
+			// TODO: re-think this initial overlay animation
+			// pre-select 'Open' filter
+			searchState.filters.push('open');
+			updateTRResults();
+			$('#just-filter li[data-just-filter-type="open"]').addClass('active');
+		}
 
 		// load images for restaurant logos
 		$('#just-extension-restaurant-list .c-restaurant').each(function(){
@@ -294,6 +298,7 @@ var JustFilterPlugin = (function(){
 
 		if( serpTRList_data[_restaurantID].open === true ){
 			_filterList.push('open');
+			openTRCount++;
 		}
 		if( parseInt(serpTRList_data[_restaurantID].minAmount) <= 10 ){
 			_filterList.push('minorder');
