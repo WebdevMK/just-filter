@@ -1,5 +1,5 @@
 /* ================= NOTES 
-- post codes examples: SW1A 1AA, SW7 5BD, EC3A 8BF, E14 5AB, W14 8UX
+- post codes examples: SW1A 1AA, SW7 5BD, EC3A 8BF, E14 5AB, W14 8UX, OX9 2DW
 - in DOM, closed restaurants don't have restaurant IDs;
 - TR stands for Takeaway Restaurant
 =========================== */
@@ -104,9 +104,9 @@ var JustFilterPlugin = (function(){
 			// TODO: re-think this initial overlay animation
 			// pre-select 'Open' filter
 			searchState.filters.push('open');
-			updateTRResults();
 			$('#just-filter li[data-just-filter-type="open"]').addClass('active');
 		}
+		updateTRResults();
 
 		// load images for restaurant logos
 		$('#just-extension-restaurant-list .c-restaurant').each(function(){
