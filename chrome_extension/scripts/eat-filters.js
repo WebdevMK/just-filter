@@ -17,7 +17,7 @@ var JustFilterPlugin = (function(){
 		filterList = ['open', 'minorder', 'freedelivery', 'rating', 'promotion', 'preorder'],
 		stringOfAvailableFiltersForShownTRs = '',
 		cuisinesCount = { 'all': 0},
-		openTRCount = 0,
+		openTRCount = 0, // counts all TRs that fall in to 'open' filter category; used to decide about pre-selecting 'open' filter;
 		searchState = { cuisines: [], sorting: "default", filters: [] },
 		shouldIShowResults = false, // a flag indicating the timing for showing TR results (to control overlay animation and minimum overlay time)
 		overlayAnimationTiming = [150, 350, 150, 350, 150]; // timing for overlay animation: [ overlay appear -> scrolling begins, scroll time, scrolling stops -> hiding TRs, no TRs shown, showing TRs -> removing overlay]
@@ -174,8 +174,9 @@ var JustFilterPlugin = (function(){
 
 	var _buildCuisines = function(){
 
-		var _htmlCuisinesHighlighted = '';
-		var _htmlCuisinesNormal = '';
+		var _htmlCuisinesHighlighted = '',
+			_htmlCuisinesNormal = '',
+			_countCuisinesHighlighted = 0;
 
 		htmlCuisines = '<div class="o-card"> <ul class="just-filter-cuisines">';
 
@@ -193,6 +194,7 @@ var JustFilterPlugin = (function(){
 				// TODO: arrange them in a specific and fixed order
 				if( highlightedCuisinesTypes.indexOf( _cuisineName ) > -1 ){
 					_htmlCuisinesHighlighted += '<li class="just-filter-highlighted-item" data-cuisine-type="'+_cuisineName+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
+					_countCuisinesHighlighted++;
 				} else {
 					_htmlCuisinesNormal += '<li class="is-hideable" data-cuisine-type="'+_cuisineName+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
 				}
@@ -205,6 +207,12 @@ var JustFilterPlugin = (function(){
 		htmlCuisines += '</ul> <p class="just-filter-cuisines-control"> <span class="just-filter-cuisines-show-more">More Cuisines</span> <span class="just-filter-cuisines-show-fewer">Fewer Cuisines</span> </p> </div>';
 
 		$('.c-serp-filter__list[data-ft="cuisineFilter"] h3').after( htmlCuisines );
+
+		// if there's less than 3 highlighted cuisines, then open the rest of cuisines
+		if( _countCuisinesHighlighted < 3 ){
+			$('.just-filter-cuisines-control').addClass('just-filter-list-expanded');
+			$('.just-filter-cuisines li.is-hideable').addClass('is-shown');
+		}
 
 		// Cuisine Filters functionality
 		$('.just-filter-cuisines li p').on('click', function(){
