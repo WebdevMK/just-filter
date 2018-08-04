@@ -2,12 +2,12 @@
 <html>
   <head>
     <style>
-      * {
+      body, body * {
         box-sizing: border-box;
       }
       body {
         width: 200px;
-        height: 100px;
+        margin: 10px 15px;
       }
       .headline {
         text-align: center;
@@ -48,6 +48,23 @@
         transition: all 0.4s cubic-bezier(0.33, 1.6, 0.66, 1);
       }
 
+      .contact {
+        padding-top: 10px;
+      }
+      .contact p {
+        margin: 10px 0;
+      }
+      .contact p.rating {
+        font-size: 16px;
+      }
+      .contact a {
+        color: #266abd;
+        text-decoration: none;
+      }
+      .contact a:hover, .contact a:active {
+        text-decoration: underline;
+      }
+
     </style>
   </head>
   <body>
@@ -57,6 +74,11 @@
       <div class="filters-switch-main">
         <div class="filters-switch-button"></div>
       </div>
+    </section>
+
+    <section class="contact">
+      <p class="rating">Like it? <a href="https://chrome.google.com/webstore/detail/filters-and-sorting-for-j/fmeomfjanjjmidfpcdjmnpdcnpdlklko" target="_blank">Rate it!</a></p>
+      <p>Don't like it? Contact us: <a href="mailto:justdeveloper@protonmail.com">justdeveloper@protonmail.com</a></p>
     </section>
 
     <script src="popup.js"></script>
