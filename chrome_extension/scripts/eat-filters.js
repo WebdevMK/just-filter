@@ -176,28 +176,42 @@ var JustFilterPlugin = (function(){
 
 		var _htmlCuisinesHighlighted = '',
 			_htmlCuisinesNormal = '',
-			_countCuisinesHighlighted = 0;
+			_countCuisinesHighlighted = 0,
+			_cuisinesArr = [];
 
 		htmlCuisines = '<div class="o-card"> <ul class="just-filter-cuisines">';
 
-		// loop through initial Cuisine list
+		// create an array of cuisine names to be used for alphabetical sorting
 		for( var _cuisineType in cuisinesCount ){
+			if( _cuisineType != 'all' ){
+				_cuisinesArr.push( _cuisineType );
+			}
+		}
 
-			if( _cuisineType === 'all' ){
-				// 'All' Cusines count
-				htmlCuisines += '<li class="is-selected just-filter-separate-item just-filter-cusine-all" data-cuisine-type="all"><p><span class="just-filter-tickbox"></span>All <span class="just-filter-cuisine-count">(213)</span></p></li>';
+		// sort cuisines alphabetically ignoring special chars( exp. *)
+		_cuisinesArr.sort(function(a, b){
+			var a = a.replace('*', '');
+			var b = b.replace('*', '');
+		    if(a < b) return -1;
+		    if(a > b) return 1;
+		    return 0;
+		});
+
+		// add HTML for 'ALL' option
+		htmlCuisines += '<li class="is-selected just-filter-separate-item just-filter-cusine-all" data-cuisine-type="all"><p><span class="just-filter-tickbox"></span>All <span class="just-filter-cuisine-count">(0)</span></p></li>';
+			
+		// loop through initial Cuisine array
+		for( var i=0; i < _cuisinesArr.length; i++){
+
+			var _cuisineName = _cuisinesArr[i];
+			var _trCount = cuisinesCount[ _cuisineName ];
+
+			// highlighted cuisines gathered at the top
+			if( highlightedCuisinesTypes.indexOf( _cuisineName ) > -1 ){
+				_htmlCuisinesHighlighted += '<li class="just-filter-highlighted-item" data-cuisine-type="'+_cuisineName+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
+				_countCuisinesHighlighted++;
 			} else {
-				var _cuisineName = _cuisineType;
-				var _trCount = cuisinesCount[ _cuisineType ];
-
-				// highlighted cuisines gathered at the top
-				// TODO: arrange them in a specific and fixed order
-				if( highlightedCuisinesTypes.indexOf( _cuisineName ) > -1 ){
-					_htmlCuisinesHighlighted += '<li class="just-filter-highlighted-item" data-cuisine-type="'+_cuisineName+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
-					_countCuisinesHighlighted++;
-				} else {
-					_htmlCuisinesNormal += '<li class="is-hideable" data-cuisine-type="'+_cuisineName+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
-				}
+				_htmlCuisinesNormal += '<li class="is-hideable" data-cuisine-type="'+_cuisineName+'"><p><span class="just-filter-tickbox"></span>'+_cuisineName+' <span class="just-filter-cuisine-count">('+_trCount+')</span></p></li>';
 			}
 		}
 
