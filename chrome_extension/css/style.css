@@ -210,7 +210,7 @@
     text-decoration: underline;
   }
   .just-filter-cuisines li p {
-    padding: 8px 8px 8px 32px;
+    padding: 9px 8px 7px 32px;
     margin-bottom: 5px;
     position: relative;
     text-transform: capitalize;
@@ -218,6 +218,9 @@
   .just-filter-cuisines li.just-filter-separate-item {
     border-bottom: 1px solid #cacaca;
     margin-bottom: 8px;
+  }
+  .just-filter-cuisines li.just-filter-separate-item.just-filter-highlighted-item {
+    margin-bottom: 0;
   }
   .just-filter-cuisines li.is-selected {
     padding: 0;
@@ -241,7 +244,6 @@
     font-size: 16px;
     font-weight: 400;
     cursor: pointer;
-    border-top: 1px solid #cacaca;
     padding-top: 15px;
   }
   .just-filter-cuisines-control .just-filter-cuisines-show-more {
@@ -265,6 +267,9 @@
     padding-right: 15px;
     width: 100%;
     box-sizing: border-box;
+  }
+  .just-filter-cuisines-control.just-filter-list-expanded {
+    border-top: 1px solid #cacaca;
   }
   .just-filter-cuisines-control.just-filter-list-expanded .just-filter-cuisines-show-more {
     display: none;
