@@ -571,8 +571,37 @@ var JustFilterPlugin = (function(){
 	    animateScroll(0);
 	};
 
+	// runs on restaurants results pages with preselected cuisines or sorting
+	// we don't have all the data at those pages, and the filters wouldn't work
+	// we are adding a message and a redirect link
+	var wrongPageNotice = function(){
+
+		var _redirectHref = '',
+			_currentPathname = '',
+			_noticeHTML = '',
+			_arr,
+			_noticeCSS = '<style> #just-eat-extension-notice { display: none; } @media only screen and (min-width: 768px){ .c-serp__header.c-serp__header--primary { margin-bottom: 0; } #just-eat-extension-notice { display: block; padding: 16px 0; margin-bottom: 32px; border-bottom: 1px solid #cacaca; } #just-eat-extension-notice p { font-size: 24px; line-height: 28px; font-weight: 300; font-family: "Ubuntu";    color: #333; } #just-eat-extension-notice a { text-decoration: none; color: #266abd; text-decoration: none; font-weight: 500; font-size: 16px; line-height: 19px; } #just-eat-extension-notice a:hover, #just-eat-extension-notice a:active { text-decoration: underline; } } </style>';
+
+		if( window.location.pathname.split('/').length > 3 ){
+			_arr = window.location.pathname.split('/');
+			_currentPathname = '/' + _arr[1] + '/' + _arr[2];
+		} else {
+			_currentPathname = window.location.pathname;
+		}
+		
+		_redirectHref = window.location.origin + _currentPathname;
+		_noticeHTML = '<div id="just-eat-extension-notice"> <div class="l-container l-container--inner"> <p>Just Eat Extension doesn\'t work on this subpage. <a href="' + _redirectHref + '" target="_self">Click here to redirect.</a></p> </div></div>';
+
+		// add CSS
+		$('body').append( _noticeCSS );
+		// add HTML to the page
+		$('.c-serp__header.c-serp__header--primary').after( _noticeHTML );
+
+	};
+
 	return {
-		init: init
+		init: init,
+		pageNotice: wrongPageNotice
 	}
 })();
 
@@ -609,6 +638,12 @@ chrome.storage.local.get(['isJustEatExtensionOn'], function(result) {
 			    });
 
 			});
+		} else if( window.location.href.indexOf('just-eat.co.uk/area/') >= 0 && ( window.location.href.indexOf('so=') > -1 || window.location.pathname.split('/').length > 3 ) ){
+
+			$(document).ready(function(){
+		    	JustFilterPlugin.pageNotice();
+		    });
+
 		}
 	}	
 });
